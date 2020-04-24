@@ -95,6 +95,7 @@ library(leaps)
 
 regfit = regsubsets(crim~.,data=Boston,nbest=1,nvmax=13)
 regfit.sum = summary(regfit)
+regfit.sum
 
 p = rowSums(regfit.sum$which)
 adjr2 = regfit.sum$adjr2
@@ -111,5 +112,49 @@ which.min(BIC)
 which.min(AIC)
 which.min(cp)
 which.max(adjr2)
+
+model1 = coef(regfit,8)
+model2 = coef(regfit,9)
+model3 = coef(regfit,10)
 ```
+
+```{r}
+#problem 2c
+regfit.bwd = regsubsets(crim~.,data=Boston,nvmax=13, method="backward")
+regfit.bwd.sum = summary(regfit.bwd)
+
+regfit.bwd.sum
+
+p = rowSums(regfit.bwd.sum$which)
+adjr2 = regfit.bwd.sum$adjr2
+cp = regfit.bwd.sum$cp
+rss = regfit.bwd.sum$rss
+BIC = n*log(rss/n) + (p-1)*log(n)
+
+cbind(p,rss,adjr2,cp,AIC,BIC)
+plot(p,BIC)
+
+model4 = coef(regfit.bwd,4)
+```
+
+```{r}
+#problem 2d
+
+```
+
+```{r}
+#problem 2e
+model1  = lm(crim~ zn + nox + dis + rad + ptratio + black + lstat + medv, data=Boston)
+model2  = lm(crim~ zn + indus + nox + dis + rad + ptratio + black + lstat + medv, data=Boston)
+model3  = lm(crim~ zn + indus + nox + rm + dis + rad + ptratio + black + lstat + medv, data=Boston)
+model4 = lm(crim~ zn + indus + nox + rm + dis + rad + tax+ ptratio + black + lstat + medv, data=Boston)
+
+sum((model1$residuals/(1-lm.influence(model1)$hat))^2)
+sum((model2$residuals/(1-lm.influence(model2)$hat))^2)
+sum((model3$residuals/(1-lm.influence(model3)$hat))^2)
+sum((model4$residuals/(1-lm.influence(model4)$hat))^2)
+
+coef(regfit, 9)
+```
+
 
