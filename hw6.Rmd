@@ -17,6 +17,7 @@ head(Boston)
 ```{r}
 #problem 1a
 m_crime = median(Boston$crim)
+m_crime
 ```
 
 ```{r}
@@ -43,7 +44,6 @@ sqrt(sum((bootstrap_median-mean(bootstrap_median))^2)/(B-1))
 Y = rep(0,n)
 Y[Boston$crim> m_crime] = 1
 Boston$Y = Y
-
 ```
 
 ```{r}
@@ -54,4 +54,20 @@ summary(logit)
 
 ```{r}
 #problem 1e
+LOOCV_error = rep(0,n)
+
+for(i in 1:n){
+  LOOCV_sample = Boston[-c(i), ]
+  model = glm(Y~nox + age, data = LOOCV_sample)
+  LOOCV_error[i] = sum((model$residuals/(1-lm.influence(model)$hat))^2)
+}
+
+test_error = sum(LOOCV_error) / n
+test_error
 ```
+
+```{r}
+#problem 2a
+
+```
+
