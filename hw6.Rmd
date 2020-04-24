@@ -89,6 +89,27 @@ test_error
 
 ```{r}
 #problem 2a
+Boston$Y = NULL
 
+library(leaps)
+
+regfit = regsubsets(crim~.,data=Boston,nbest=1,nvmax=13)
+regfit.sum = summary(regfit)
+
+p = rowSums(regfit.sum$which)
+adjr2 = regfit.sum$adjr2
+cp = regfit.sum$cp
+rss = regfit.sum$rss
+AIC = n*log(rss/n) + 2*(p-1)
+BIC = n*log(rss/n) + (p-1)*log(n)
+
+cbind(p,rss,adjr2,cp,AIC,BIC)
+plot(p,BIC)
+plot(p,AIC)
+
+which.min(BIC)
+which.min(AIC)
+which.min(cp)
+which.max(adjr2)
 ```
 
